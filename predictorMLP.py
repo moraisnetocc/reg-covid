@@ -39,13 +39,16 @@ def create_image_data_set(n, size):
     return images
 
 
-images = create_image_data_set(10, 200)
+images = create_image_data_set(15, 200)
+
+X_train, X_test, y_train, y_test = train_test_split(images[0][0], images[1][0], random_state=40)
 
 model = Sequential()
-model.add(Dense(500, input_dim=4, activation= "relu"))
+model.add(Dense(500, input_dim=1, activation= "relu"))
 model.add(Dense(100, activation= "relu"))
 model.add(Dense(50, activation= "relu"))
 model.add(Dense(1))
 
 model.compile(loss= "mean_squared_error" , optimizer="adam", metrics=["mean_squared_error"])
-model.fit(images[0], images[1], epochs=20)
+
+model.fit(X_train, y_train, epochs=20)
