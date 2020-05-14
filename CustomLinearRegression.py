@@ -7,14 +7,10 @@ from sklearn.tree import DecisionTreeRegressor, ExtraTreeRegressor
 import matplotlib.pyplot as plt
 
 
-
-# variável preditora
-X = np.array([ 220, 220, 220, 220, 220, 225, 225, 225, 225, 225, 230, 230, 230, 230, 230, 235, 235, 235, 235, 235 ])
-# variável alvo
-y = np.array([ 137, 137, 137, 136, 135, 135, 133, 132, 133, 133, 128, 124, 126, 129, 126, 122, 122, 122, 119, 122 ])
-
-
 class CustomLinearRegression:
+    X = None
+    y = None
+
     def __init__(self):
         self.coef_ = None
         self.intercept_ = None
@@ -72,10 +68,10 @@ class CustomLinearRegression:
         return self.rgb2gray(np.array(image.convert('RGB')))  # .tolist()
 
     def create_image_data_set(self, N, size):
-        filepath = "/Users/moraisneto/PycharmProjects/covidAI/suspeitos/"
+        filepath = "/Users/moraisneto/PycharmProjects/covidAI/malaria/"
         imagesX = []
         for i in range(1, N + 1):
-            imagesX.append(self.open_image(filepath + "{}.jpg".format(i), size))
+            imagesX.append(self.open_image(filepath + "{}.png".format(i), size))
         print('Imagens carregadas')
         return imagesX
 
@@ -106,7 +102,7 @@ class CustomLinearRegression:
 
 
 custom = CustomLinearRegression()
-result = custom.predict_x(custom.create_image_data_set(20, 200), 200, 20)
+result = custom.predict_x(custom.create_image_data_set(8, 200), 200, 8)
 print(result)
 
 teste = Image.fromarray(result)
