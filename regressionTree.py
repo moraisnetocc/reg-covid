@@ -11,7 +11,7 @@ from sklearn import metrics
 
 
 class RegressionTree:
-    N = 15
+    N = 10
     imagesX = []
     size = 200
 
@@ -32,26 +32,26 @@ class RegressionTree:
         return self.rgb2gray(np.array(image.convert('RGB'))).tolist()
 
     def create_image_data_set(self):
-        filepath = "/Users/moraisneto/PycharmProjects/covidAI/suspeitos/"
+        filepath = "/Users/moraisneto/PycharmProjects/covidAI/ImagesV2/"
         for i in range(1, self.N+1):
-            self.imagesX.append(self.__open_image(filepath + "{}.jpg".format(i)))
+            self.imagesX.append(self.__open_image(filepath + "{}.png".format(i)))
         print('Imagens carregadas')
 
     def predict_with_logistic(self):
-        regressor = LogisticRegression()
-        for i in range(0, self.N-2):
-            regressor.fit(np.asarray(self.imagesX[i]), np.asarray(self.imagesX[i+1]))
-            print("Fit {} completed".format(i))
-            # print(regressor.feature_importances_)
-        return regressor.predict(self.imagesX[13])
-
-    def predict_with_random_subspace(self):
-        regressor = BaggingRegressor(random_state=42, n_estimators=100, bootstrap_features=True)
+        regressor = DecisionTreeRegressor()
         for i in range(0, self.N-2):
             regressor.fit(self.imagesX[i], self.imagesX[i+1])
             print("Fit {} completed".format(i))
             # print(regressor.feature_importances_)
-        return regressor.predict(self.imagesX[13])
+        return regressor.predict(self.imagesX[8])
+
+    def predict_with_random_subspace(self):
+        regressor = BaggingRegressor(random_state=42, n_estimators=200, bootstrap_features=True)
+        for i in range(0, self.N-2):
+            regressor.fit(self.imagesX[i], self.imagesX[i+1])
+            print("Fit {} completed".format(i))
+            # print(regressor.feature_importances_)
+        return regressor.predict(self.imagesX[8])
 
     def predict_with_svr(self):
         regressor = svm.SVC(kernel="linear")
@@ -59,7 +59,7 @@ class RegressionTree:
             regressor.fit(self.imagesX[i], self.imagesX[i+1])
             print("Fit {} completed".format(i))
             # print(regressor.feature_importances_)
-        return regressor.predict(self.imagesX[13])
+        return regressor.predict(self.imagesX[8])
 
     def predict_with_random_forest(self):
         regressor = RandomForestRegressor(random_state=42, oob_score=True)
@@ -67,7 +67,7 @@ class RegressionTree:
             regressor.fit(self.imagesX[i], self.imagesX[i+1])
             print("Fit {} completed".format(i))
             # print(regressor.feature_importances_)
-        return regressor.predict(self.imagesX[13])
+        return regressor.predict(self.imagesX[8])
 
     def predict_with_single_tree(self):
         regressor = DecisionTreeRegressor(random_state=42)
@@ -97,7 +97,7 @@ class RegressionTree:
         return self.__predict_two(regressor)
 
     def predict_with_two_subspaces(self):
-        regressor = RandomForestRegressor(random_state=42)
+        regressor = BaggingRegressor(random_state=42)
         return self.__predict_two(regressor)
 
     def predict_with_n_subspaces(self, amount):
@@ -232,14 +232,14 @@ class RegressionTree:
 r = RegressionTree()
 r.create_image_data_set()
 
-original = Image.fromarray(r.get_image(14))
+original = Image.fromarray(r.get_image(9))
 plt.imshow(original)
 plt.show()
 
 # image_predicted = r.predict_with_random_forest()
-image_predicted = r.predict_with_random_subspace()
-# image_predicted = r.predict_with_logistic()
-# image_predicted = r.predict_with_two_forests()
+# image_predicted = r.predict_with_random_subspace()
+image_predicted = r.predict_with_logistic()
+# image_predicted = r.predict_with_two_subspaces()
 # image_predicted = r.predict_with_n_subspaces(200)
 # image_predicted = r.predict_with_svr()
 teste = Image.fromarray(image_predicted)
@@ -248,3 +248,7 @@ teste = Image.fromarray(image_predicted)
 plt.imshow(teste)
 plt.show()
 print('Finalizado')
+
+# image2 = r.predict_with_n_subspaces(200)
+# plt.imshow(Image.fromarray(image2))
+# print('Finalizado')

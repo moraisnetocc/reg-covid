@@ -27,7 +27,7 @@ def open_image(filepath, size):
     image = image.resize((size, size), Image.ANTIALIAS)
     # img = cv2.resize(cv2.imread(filepath, cv2.IMREAD_COLOR), (size, size)).astype(np.float32)
     # return img.transpose((2, 0, 1))
-    return rgb2gray(np.array(image.convert('RGB'))).tolist()
+    return rgb2gray(np.array(image.convert('RGB')))#.tolist()
 
 
 def create_image_data_set(n, size):
@@ -36,15 +36,21 @@ def create_image_data_set(n, size):
     for i in range(1, n + 1):
         images.append(open_image(filepath + "{}.jpg".format(i), size))
     print('Imagens carregadas')
-    return images
+    return np.asarray(images)
 
 
 images = create_image_data_set(15, 200)
 
-X_train, X_test, y_train, y_test = train_test_split(images[0][0], images[1][0], random_state=40)
+print(images.shape)
+x = images[0:10].reshape(images[:10].shape[0], images[:10].shape[1], 1)
+
+y = images[1:11].reshape(images[1:11].shape[0], images[1:11].shape[1], 1)
+
+X_train, X_test, y_train, y_test = train_test_split(x, y, random_state=40)
 
 model = Sequential()
-model.add(Dense(500, input_dim=1, activation= "relu"))
+# model.add(Dense(500, input_dim=1, activation= "relu"))
+model.add(Dense(500, input_shape=(15, 150, 200), activation= "relu"))
 model.add(Dense(100, activation= "relu"))
 model.add(Dense(50, activation= "relu"))
 model.add(Dense(1))
@@ -52,3 +58,9 @@ model.add(Dense(1))
 model.compile(loss= "mean_squared_error" , optimizer="adam", metrics=["mean_squared_error"])
 
 model.fit(X_train, y_train, epochs=20)
+# pred_train= model.predict(X_train)
+
+pred= model.predict(X_test)
+print(np.sqrt(mean_squared_error(y_test,pred)))
+
+# print(pred_train)
