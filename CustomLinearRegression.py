@@ -7,10 +7,14 @@ from sklearn.tree import DecisionTreeRegressor, ExtraTreeRegressor
 import matplotlib.pyplot as plt
 
 
-class CustomLinearRegression:
-    X = None
-    y = None
 
+# variável preditora
+X = np.array([])
+# variável alvo
+y = np.array([])
+
+
+class CustomLinearRegression:
     def __init__(self):
         self.coef_ = None
         self.intercept_ = None
