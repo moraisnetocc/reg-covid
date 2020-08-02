@@ -29,7 +29,7 @@ class RegressionTree:
     def __open_image(self, filepath):
         image = Image.open(filepath, 'r')
         image = image.resize((self.size, self.size), Image.ANTIALIAS)
-        return self.rgb2gray(np.array(image.convert('RGB'))).tolist()
+        return self.rgb2gray(np.array(image.convert('RGB')))
 
     def create_image_data_set(self):
         filepath = "/Users/moraisneto/PycharmProjects/covidAI/ImagesV2/"
@@ -228,6 +228,18 @@ class RegressionTree:
     def get_image(self, index):
         return np.asarray(self.imagesX[index])
 
+    def predict_n_n(self):
+        image_predicted = [[0 for j in range(self.N)] for i in range(self.N)]
+
+        for i in range(self.size):
+            for j in range(self.size):
+                regressor = DecisionTreeRegressor(random_state=42)
+                for k in range(0, self.N-1):
+                    regressor.fit([self.imagesX[k][i][j]], [self.imagesX[k+1][i][j]])
+                image_predicted[i][j] = regressor.predict(self.imagesX[self.N-1][i][j])
+
+        return np.asarray(image_predicted)
+
 
 r = RegressionTree()
 r.create_image_data_set()
@@ -236,9 +248,9 @@ original = Image.fromarray(r.get_image(9))
 plt.imshow(original)
 plt.show()
 
-# image_predicted = r.predict_with_random_forest()
+image_predicted = r.predict_n_n()
 # image_predicted = r.predict_with_random_subspace()
-image_predicted = r.predict_with_logistic()
+# image_predicted = r.predict_with_logistic()
 # image_predicted = r.predict_with_two_subspaces()
 # image_predicted = r.predict_with_n_subspaces(200)
 # image_predicted = r.predict_with_svr()

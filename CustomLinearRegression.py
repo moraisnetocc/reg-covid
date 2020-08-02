@@ -72,10 +72,10 @@ class CustomLinearRegression:
         return self.rgb2gray(np.array(image.convert('RGB')))  # .tolist()
 
     def create_image_data_set(self, N, size):
-        filepath = "/Users/moraisneto/PycharmProjects/covidAI/malaria/"
+        filepath = "/Users/moraisneto/PycharmProjects/covidAI/suspeitos/"
         imagesX = []
         for i in range(1, N + 1):
-            imagesX.append(self.open_image(filepath + "{}.png".format(i), size))
+            imagesX.append(self.open_image(filepath + "{}.jpg".format(i), size))
         print('Imagens carregadas')
         return imagesX
 
@@ -94,19 +94,10 @@ class CustomLinearRegression:
 
         return np.asarray(image_predicted)
 
- # def organize_x(self, images, size, N):
- #        x_train = [0]
- #        for i in range(size):
- #            for j in range(size):
- #                line = []
- #                for k in range(N):
- #                    line.append(images[k][i][j])
- #                x_train = line
- #
 
 
 custom = CustomLinearRegression()
-result = custom.predict_x(custom.create_image_data_set(8, 200), 200, 8)
+result = custom.predict_x(custom.create_image_data_set(12, 200), 200, 12)
 print(result)
 
 teste = Image.fromarray(result)
