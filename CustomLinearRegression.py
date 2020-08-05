@@ -80,7 +80,7 @@ class CustomLinearRegression:
         return imagesX
 
     def predict_x(self, images, size, N):
-        image_predicted = [[0 for j in range(200)] for i in range(200)]
+        image_predicted = [[0 for j in range(size)] for i in range(size)]
 
         for i in range(size):
             for j in range(size):
@@ -97,7 +97,7 @@ class CustomLinearRegression:
 
 
 custom = CustomLinearRegression()
-result = custom.predict_x(custom.create_image_data_set(12, 200), 200, 12)
+result = custom.predict_x(custom.create_image_data_set(20, 400), 400, 20)
 print(result)
 
 teste = Image.fromarray(result)

@@ -32,7 +32,7 @@ class RegressionTree:
         return self.rgb2gray(np.array(image.convert('RGB')))
 
     def create_image_data_set(self):
-        filepath = "/Users/moraisneto/PycharmProjects/covidAI/ImagesV2/"
+        filepath = "/Users/moraisneto/PycharmProjects/covidAI/imagensv3/"
         for i in range(1, self.N+1):
             self.imagesX.append(self.__open_image(filepath + "{}.png".format(i)))
         print('Imagens carregadas')
