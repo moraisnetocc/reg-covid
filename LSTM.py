@@ -32,7 +32,7 @@ def organize_sum(dataset):
 numpy.random.seed(7)
 
 # load the dataset
-dataframe = pandas.read_csv('natal.csv', usecols=[1], engine='python')
+dataframe = pandas.read_csv('brasil.csv', usecols=[1], engine='python')
 dataset = dataframe.values
 dataset = dataset.astype('float32')
 
@@ -60,48 +60,23 @@ model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
 model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
 
-
+times = 10
+output = []
 # make predictions
 trainPredict = model.predict(trainX)
+increment = 1/trainPredict.size
+day = 1
 
-day1 = model.predict(numpy.reshape(trainPredict[train_size-3], (1, 1, 1)))
-day2 = model.predict(numpy.reshape(day1, (1, 1, 1)))
-day3 = model.predict(numpy.reshape(day2, (1, 1, 1)))
-day4 = model.predict(numpy.reshape(day3, (1, 1, 1)))
-day5 = model.predict(numpy.reshape(day4, (1, 1, 1)))
-day6 = model.predict(numpy.reshape(day5, (1, 1, 1)))
-day7 = model.predict(numpy.reshape(day6, (1, 1, 1)))
-day8 = model.predict(numpy.reshape(day7, (1, 1, 1)))
-day9 = model.predict(numpy.reshape(day8, (1, 1, 1)))
-day10 = model.predict(numpy.reshape(day9, (1, 1, 1)))
+while bool(model.predict(numpy.reshape(day, (1, 1, 1))) < 1):
+    day += increment
+
+for i in range(times):
+    output.append(scaler.inverse_transform(model.predict(numpy.reshape(day, (1, 1, 1)))).tolist()[0][0])
+    day += increment
 
 # invert predictions
 trainPredict = scaler.inverse_transform(trainPredict)
 trainY = scaler.inverse_transform([trainY])
-
-day1 = scaler.inverse_transform(day1)
-day2 = scaler.inverse_transform(day2)
-day3 = scaler.inverse_transform(day3)
-day4 = scaler.inverse_transform(day4)
-day5 = scaler.inverse_transform(day5)
-day6 = scaler.inverse_transform(day6)
-day7 = scaler.inverse_transform(day7)
-day8 = scaler.inverse_transform(day8)
-day9 = scaler.inverse_transform(day9)
-day10 = scaler.inverse_transform(day10)
-
-output = [
-    day1.tolist()[0][0],
-    day2.tolist()[0][0],
-    day3.tolist()[0][0],
-    day4.tolist()[0][0],
-    day5.tolist()[0][0],
-    day6.tolist()[0][0],
-    day7.tolist()[0][0],
-    day8.tolist()[0][0],
-    day9.tolist()[0][0],
-    day10.tolist()[0][0],
-]
 
 
 print(trainPredict)
