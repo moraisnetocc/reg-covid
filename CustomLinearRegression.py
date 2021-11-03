@@ -5,7 +5,7 @@ import statsmodels.api as sm
 from PIL import Image
 from sklearn.tree import DecisionTreeRegressor, ExtraTreeRegressor
 import matplotlib.pyplot as plt
-
+import os,sys
 
 
 # variável preditora
@@ -71,8 +71,9 @@ class CustomLinearRegression:
         image = image.resize((size, size), Image.ANTIALIAS)
         return self.rgb2gray(np.array(image.convert('RGB')))  # .tolist()
 
-    def create_image_data_set(self, N, size):
-        filepath = "/Users/moraisneto/PycharmProjects/covidAI/suspeitos/"
+    def create_image_data_set(self, N, size,filepath=None):
+        #aqui seria interessante colocar uma localização absoluta do projeto ou modificar fileparth de parametro
+        filepath =os.path.abspath(filepath) or "/Users/moraisneto/PycharmProjects/covidAI/suspeitos/"
         imagesX = []
         for i in range(1, N + 1):
             imagesX.append(self.open_image(filepath + "{}.jpg".format(i), size))
@@ -93,19 +94,21 @@ class CustomLinearRegression:
                 image_predicted[i][j] = self.predict([line[N-1]])[0]
 
         return np.asarray(image_predicted)
+if __name__=="__main__":
+    custom = CustomLinearRegression()
+    try:
+        imagem=custom.create_image_data_set(12, 200,sys.argv[1])
+    except IndexError:
+        imagem=custom.create_image_data_set(12, 200)
+    result = custom.predict_x(imagem, 200, 12)
+    print(result)
 
+    teste = Image.fromarray(result)
 
-
-custom = CustomLinearRegression()
-result = custom.predict_x(custom.create_image_data_set(12, 200), 200, 12)
-print(result)
-
-teste = Image.fromarray(result)
-
-# print('Mean Absolute Error:', metrics.mean_absolute_error(image_predicted, r.get_image(14)))
-plt.imshow(teste)
-plt.show()
-print('Finalizado')
-# custom.fit(X, y)
-# print(custom.predict(X))
+    # print('Mean Absolute Error:', metrics.mean_absolute_error(image_predicted, r.get_image(14)))
+    plt.imshow(teste)
+    plt.show()
+    print('Finalizado')
+    # custom.fit(X, y)
+    # print(custom.predict(X))
 
