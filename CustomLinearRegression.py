@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 
 
 # variável preditora
+from tensorflow import metrics
+
 X = np.array([])
 # variável alvo
 y = np.array([])
@@ -72,10 +74,10 @@ class CustomLinearRegression:
         return self.rgb2gray(np.array(image.convert('RGB')))  # .tolist()
 
     def create_image_data_set(self, N, size):
-        filepath = "/Users/moraisneto/PycharmProjects/covidAI/suspeitos/"
+        filepath = "/Users/moraisneto/PycharmProjects/covidAI/Images/"
         imagesX = []
         for i in range(1, N + 1):
-            imagesX.append(self.open_image(filepath + "{}.jpg".format(i), size))
+            imagesX.append(self.open_image(filepath + "{}.png".format(i), size))
         print('Imagens carregadas')
         return imagesX
 
@@ -97,12 +99,14 @@ class CustomLinearRegression:
 
 
 custom = CustomLinearRegression()
-result = custom.predict_x(custom.create_image_data_set(20, 400), 400, 20)
+data = custom.create_image_data_set(14, 100)
+result = custom.predict_x(data, 100, 13)
 print(result)
 
 teste = Image.fromarray(result)
 
-# print('Mean Absolute Error:', metrics.mean_absolute_error(image_predicted, r.get_image(14)))
+# print('Mean Absolute Error:', metrics.mean_absolute_error(teste,  Image.fromarray(data[13])))
+
 plt.imshow(teste)
 plt.show()
 print('Finalizado')

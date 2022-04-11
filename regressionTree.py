@@ -1,13 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
-from sklearn.tree import DecisionTreeRegressor, ExtraTreeRegressor
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, BaggingRegressor
-from sklearn.linear_model import LogisticRegression
 from scipy.fftpack import dct, idct
 from sklearn.model_selection import cross_val_score
 from sklearn import svm
-from sklearn import metrics
 
 
 class RegressionTree:
